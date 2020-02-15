@@ -32,10 +32,10 @@ def write2configJson(data, filename = "config.json"):
     fileObj = None
 
     try:
-        fileObj = open(filename, "w", encoding="utf-8-sig")
-        json.dump(data, fileObj, ensure_ascii=False, indent=4)
+        fileObj = open(filename, "w")
+        json.dump(data, fileObj, ensure_ascii=True, indent=4)
     except Exception as e:
-        print("\n\n\n" + str(e))
+        print("\n\n\write file error: \n\n" + str(e))
 
 
 
@@ -49,7 +49,7 @@ def readConfigJson(filename = "config.json"):
         data = fin.read()
         data = json.loads(data)
     except Exception as e:
-        print("\n\n\n" + str(e))
+        print("\n\n\read from file error: \n\n" + str(e))
 
     return data
 
