@@ -69,6 +69,16 @@ def isValidUrl(url):
     return re.match(regex, url) is not None
 
 
+def isUrlHasDomain(url):
+    tld = tldextract.extract(url)
+
+    if len(tld.domain.strip()) < 1:
+        return False
+
+    if len(tld.suffix.strip()) < 1:
+        return False
+
+
 def getDomain(url):
     parsed_uri = urlparse(url)
     tld = tldextract.extract(url)
@@ -82,6 +92,19 @@ def addUrl2ConfigJson(jsonObj, url):
     
     if isValidUrl(url) == True and domain not in jsonObj["root_urls"]:
         jsonObj["root_urls"].append(domain)
+
+
+
+def removeInvalidUrlFromConfig(jsonObj):
+    
+    for url in jsonObj["root_urls"]:
+
+        if isUrlHasDomain(url) == False:
+            try:
+                index = jsonObj["root_urls"].index(url)
+                del jsonObj["root_urls"][index]
+            except:
+                pass
 
 
 def extractor(soup , host) : 
@@ -182,6 +205,7 @@ def main() :
 		else : 
 				print ('\n\nNo EXTERNAL Link Found\n\n')
 
+	removeInvalidUrlFromConfig(configJson)
 	write2configJson(configJson)				
 
 main()
