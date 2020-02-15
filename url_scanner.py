@@ -3,6 +3,7 @@ Required libraries/modules ---
 
 requests,
 BeautifulSoup4
+tldextract
 '''
 
 
@@ -22,6 +23,7 @@ import argparse
 import json
 import re
 from urllib.parse import urlparse
+import tldextract
 
 external = []
 unknown =  []
@@ -69,9 +71,8 @@ def isValidUrl(url):
 
 def getDomain(url):
     parsed_uri = urlparse(url)
-    mainDomain = '.'.join(parsed_uri.netloc.split('.')[-2:])
-    domain = '{uri.scheme}://{mainDomain}/'.format(uri=parsed_uri,mainDomain=mainDomain)
-
+    tld = tldextract.extract(url)
+    domain = '{uri.scheme}://{tld.domain}.{tld.suffix}/'.format(uri=parsed_uri,tld=tld)
     return domain
 
     
